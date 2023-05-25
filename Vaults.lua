@@ -45,6 +45,36 @@ function vaults:findItem(item)
     return list
 end
 
+--idk why but i wanted to know how big the network is
+
+function vaults:size()
+    local count = 0
+    for k,v in pairs(self.vaults) do --iterates through the vaults
+        count = count + v.size()
+    end
+    return count 
+end
+
+--
+
+function vaults:pullItems(target,list)
+    for k,v in pairs(list) do
+        self.vaults[v.vault].pullItems(target,v.slot)
+    end
+end
+
+--
+
+function vaults:pushItems(target,list)
+    local count = 0
+    for k,v in pairs(list) do
+        if not (self.vaults[v.vault].name == target) then
+            count = count + self.vaults[v.vault].pushItems(target,v.slot,255)
+        end
+    end
+    return count
+end
+
 --helper function, returns all peripheral names of certain type on network
 
 function vaults.find(type)
