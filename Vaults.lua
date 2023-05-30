@@ -1,4 +1,4 @@
-vaults = {}
+local vaults = {}
 vaults.__index = vaults
 
 
@@ -24,6 +24,7 @@ function vaults:wrap()
     self.vaults = {}
     for k,v in pairs(self.list) do
         self.vaults[k] = peripheral.wrap(self.list[k])
+        self.vaults[k].index = k
         self.vaults[k].name = self.list[k]
     end
 end
@@ -65,23 +66,35 @@ end
 
 --
 
-function vaults:pushItems(target,list)
-    local count = 0
+function vaults:pushItems(target,list,count)
+    local oldcount = count
     for k,v in pairs(list) do
         if not (self.vaults[v.vault].name == target) then
-            count = count + self.vaults[v.vault].pushItems(target,v.slot,255)
+            local ccount = self.vaults[v.vault].pushItems(target,v.slot,count)
+            count = count - ccount
+            if ccount == v.count then
+                self.index[v.vault][v.slot] = nil
+            end
         end
     end
-    return count
+    return oldcount - count
 end
 
 --helper function, returns all peripheral names of certain type on network
 
-function vaults.find(type)
+function vaults.findInv(type,count)
+    local count = count or 0
     local vaultsS = {peripheral.find(type)}
     local names = {}
+    local hash = {}
     for k,v in pairs(vaultsS) do
-        names[k] = peripheral.getName(vaultsS[k])
+        name = peripheral.getName(vaultsS[k])
+
+        if not hash[name] then
+            names[#names+1] = name
+            hash[name] = true
+        end
+        if #names == count then return names end
     end
     return names
 end
@@ -116,7 +129,7 @@ function vaults:genList()
                 modhash[modname] = true
             elseif not namehash[name] then
                 names[#names+1] = name
-                namehash[name] = name
+                namehash[name] = true
             end
         end
     end
