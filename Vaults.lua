@@ -8,7 +8,8 @@ setmetatable(vaults, {
     end,
 })
 
---constructor function
+
+-- constructor function
 function vaults.new(list)
     local self = setmetatable({},vaults)
     self.list = list
@@ -18,8 +19,8 @@ function vaults.new(list)
     return self
 end
 
---wrap method, adds a vaults field to the object and fills it with the returned objecs of every vault on the list...
 
+--wrap method, adds a vaults field to the object and fills it with the returned objecs of every vault on the list...
 function vaults:wrap()
     self.vaults = {}
     for k,v in pairs(self.list) do
@@ -29,8 +30,8 @@ function vaults:wrap()
     end
 end
 
---find arbitraty items in the master index!
 
+--find arbitraty items in the master index!
 function vaults:findItem(item)
     local list = {}
     for k,v in pairs(self.index) do --iterate through vaults
@@ -46,8 +47,8 @@ function vaults:findItem(item)
     return list
 end
 
---idk why but i wanted to know how big the network is
 
+--idk why but i wanted to know how big the network is
 function vaults:size()
     local count = 0
     for k,v in pairs(self.vaults) do --iterates through the vaults
@@ -56,16 +57,16 @@ function vaults:size()
     return count 
 end
 
---
 
+--
 function vaults:pullItems(target,list)
     for k,v in pairs(list) do
         self.vaults[v.vault].pullItems(target,v.slot)
     end
 end
 
---
 
+-- target: table
 function vaults:pushItems(target,list,count)
     local oldcount = count
     for k,v in pairs(list) do
@@ -80,15 +81,15 @@ function vaults:pushItems(target,list,count)
     return oldcount - count
 end
 
---helper function, returns all peripheral names of certain type on network
 
+--helper function, returns all peripheral names of certain type on network
 function vaults.findInv(type,count)
     local count = count or 0
     local vaultsS = {peripheral.find(type)}
     local names = {}
     local hash = {}
     for k,v in pairs(vaultsS) do
-        name = peripheral.getName(vaultsS[k])
+        local name = peripheral.getName(vaultsS[k])
 
         if not hash[name] then
             names[#names+1] = name
@@ -99,8 +100,8 @@ function vaults.findInv(type,count)
     return names
 end
 
---index vaults and returns said index
 
+--index vaults and returns said index
 function vaults:doIndex()
     self.index = {}
     for k,v in pairs(self.vaults) do
@@ -109,8 +110,8 @@ function vaults:doIndex()
     --return self.index
 end
 
---god help me
 
+--god help me
 function vaults:genList()
     local modnames = {}
     local modhash = {}
@@ -119,7 +120,7 @@ function vaults:genList()
     local namehash = {}
 
     for k,v in pairs(self.index) do
-        for k,v in pairs(v) do
+        for _,v in pairs(v) do
             local _,colon = v.name:find(":")
             local modname = v.name:sub(1,colon)
             local name = v.name:sub(colon+1,v.name:len())
@@ -134,6 +135,7 @@ function vaults:genList()
         end
     end
     return {["names"] = names,["modnames"] = modnames}
+
 end
 
 return vaults
