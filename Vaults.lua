@@ -1,6 +1,10 @@
 local vaults = {}
 vaults.__index = vaults
 
+local wrap = peripheral.wrap
+local setmetatable = setmetatable
+local getName = peripheral.getName
+local find = peripheral.find
 
 setmetatable(vaults, {
     __call = function (cls, ...)
@@ -24,7 +28,7 @@ end
 function vaults:wrap()
     self.vaults = {}
     for k,v in pairs(self.list) do
-        self.vaults[k] = peripheral.wrap(self.list[k])
+        self.vaults[k] = wrap(self.list[k])
         self.vaults[k].index = k
         self.vaults[k].name = self.list[k]
     end
@@ -85,11 +89,11 @@ end
 --helper function, returns all peripheral names of certain type on network
 function vaults.findInv(type,count)
     local count = count or 0
-    local vaultsS = {peripheral.find(type)}
+    local vaultsS = {find(type)}
     local names = {}
     local hash = {}
     for k,v in pairs(vaultsS) do
-        local name = peripheral.getName(vaultsS[k])
+        local name = getName(vaultsS[k])
 
         if not hash[name] then
             names[#names+1] = name
