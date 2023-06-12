@@ -18,7 +18,7 @@ function vaults.new(list)
     local self = setmetatable({},vaults)
     self.list = list
     self:wrap()
-    self:doIndex()
+    self:indexAll()
     self.new = function() error("Instances may not create other instances!",2) end
     return self
 end
@@ -86,16 +86,15 @@ end
 -- end
 
 
--- target: table
+
 function vaults:pushItems(target,list,count)
     local oldcount = count
     for k,v in pairs(list) do
         if not (self.vaults[v.vault].name == target) then
-            local ccount = self.vaults[v.vault].pushItems(target,v.slot,count)
+            local ccount = self.vaults[v.vault].pushItems(getName(target),v.slot,count)
             count = count - ccount
-            if ccount == v.count then
-                self.index[v.vault][v.slot] = nil
-            end
+            if count == 0 then return 0 end
+            self:indexVault(target.index)
         end
     end
     return oldcount - count
@@ -122,12 +121,20 @@ end
 
 
 --index vaults and returns said index
-function vaults:doIndex()
+function vaults:indexAll()
     self.index = {}
     for k,v in pairs(self.vaults) do
         self.index[k] = v.list()
     end
     --return self.index
+end
+
+
+--indexes specific vault in the vaults index
+function vaults:indexVault(vaultIndex)
+    local list = self.vaults[vaultIndex]list()
+    self.index[vaultIndex] = list
+    return list
 end
 
 
