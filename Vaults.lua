@@ -90,7 +90,7 @@ end
 function vaults:pushItems(target,list,count)
     local initialcount = count
     local count = count
-    for k,v in pairs(list)
+    for k,v in pairs(list) do
         if not (self.vaults[v.vault].name == target) then
             repeat
 
@@ -98,6 +98,7 @@ function vaults:pushItems(target,list,count)
                 count = count - ccount
 
             until ccount - count or ccount == 0
+
             return count - oldcount
         end
     end
