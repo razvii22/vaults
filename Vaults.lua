@@ -94,8 +94,10 @@ function vaults:pushItems(target,list,count)
             local ccount = self.vaults[v.vault].pushItems(getName(target),v.slot,count)
             count = count - ccount
             if count == 0 then return 0 end
-            self:indexVault(target.index)
         end
+    end
+    for k,v in pairs(list) do
+        self:indexVault(list.vault)
     end
     return oldcount - count
 end
@@ -132,7 +134,7 @@ end
 
 --indexes specific vault in the vaults index
 function vaults:indexVault(vaultIndex)
-    local list = self.vaults[vaultIndex]list()
+    local list = self.vaults[vaultIndex].list()
     self.index[vaultIndex] = list
     return list
 end
