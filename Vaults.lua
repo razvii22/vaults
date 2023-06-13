@@ -86,7 +86,7 @@ function vaults:pullItems(source,target,list,count)
 end
 
 
-
+--God has forsaken us, the blood of the gods have frozen in fear knowing what they have created 
 function vaults:pushItems(target,list,count)
     local oldcount = count
     for k,v in pairs(list) do
@@ -100,11 +100,12 @@ function vaults:pushItems(target,list,count)
     for k,v in pairs(list) do
         if not hash[v] then 
             self:indexVault(v.vault)
+            hash[v] = true
         else
             hash[v] = true
         end
     end
-    return oldcount - count
+    return hash
 end
 
 
