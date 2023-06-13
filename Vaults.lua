@@ -98,14 +98,12 @@ function vaults:pushItems(target,list,count)
     end
     local hash = {}
     for k,v in pairs(list) do
-        if not hash[v] then 
+        if not hash[v.vault] then 
             self:indexVault(v.vault)
-            hash[v] = true
-        else
-            hash[v] = true
+            hash[v.vault] = true
         end
     end
-    return hash
+    return oldcount - count
 end
 
 
