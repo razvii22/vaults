@@ -134,6 +134,7 @@ end
 
 --indexes specific vault in the vaults index
 function vaults:indexVault(vaultIndex)
+    if not vaultIndex then return 1 end
     local list = self.vaults[vaultIndex].list()
     self.index[vaultIndex] = list
     return list
