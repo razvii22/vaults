@@ -103,7 +103,7 @@ function vaults:pushItems(target,list,count)
             hash[v.vault] = true
         end
     end
-    return oldcount - count
+    return hash
 end
 
 
