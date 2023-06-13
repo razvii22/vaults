@@ -97,7 +97,7 @@ function vaults:pushItems(target,list,count)
         end
     end
     for k,v in pairs(list) do
-        if self:indexVault(list.vault) == 1 then return
+        self:indexVault(list.vault)
     end
     return oldcount - count
 end
