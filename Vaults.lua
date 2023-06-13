@@ -62,28 +62,28 @@ function vaults:size()
 end
 
 
--- --
--- function vaults:pullItems(source,target,list,count)
---     if type(target) ~= "table" then error("Target not specified correctly.",2) end
 
---     local oldcount = count
+function vaults:pullItems(source,target,list,count)
+    if type(target) ~= "table" then error("Target not specified correctly.",2) end
 
---     for k,v in pairs(list) do
+    local oldcount = count
 
---         if not (self.vaults[v.vault].name == target) then
+    for k,v in pairs(list) do
+
+        if not (self.vaults[v.vault].name == target) then
 
 
             
---             count = count - ccount
+            count = count - ccount
 
---             if ccount == v.count then
---                 self.index[v.vault][v.slot] = nil
---             end
---         end
---     end
+            if ccount == v.count then
+                self.index[v.vault][v.slot] = nil
+            end
+        end
+    end
 
 
--- end
+end
 
 
 
@@ -93,11 +93,16 @@ function vaults:pushItems(target,list,count)
         if not (self.vaults[v.vault].name == target) then
             local ccount = self.vaults[v.vault].pushItems(target,v.slot,count)
             count = count - ccount
-            if count == 0 then return 0 end
+            if count == 0 then return count end
         end
     end
+    local hash = {}
     for k,v in pairs(list) do
-        self:indexVault(list.vault)
+        if not hash[v] then 
+            self:indexVault(v.vault)
+        else
+            hash[v] = true
+        end
     end
     return oldcount - count
 end
@@ -165,7 +170,6 @@ function vaults:genList()
         end
     end
     return {["names"] = names,["modnames"] = modnames}
-
 end
 
 return vaults
