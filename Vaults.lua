@@ -91,7 +91,7 @@ function vaults:pushItems(target,list,count)
     local oldcount = count
     for k,v in pairs(list) do
         if not (self.vaults[v.vault].name == target) then
-            local ccount = self.vaults[v.vault].pushItems(getName(target),v.slot,count)
+            local ccount = self.vaults[v.vault].pushItems(target,v.slot,count)
             count = count - ccount
             if count == 0 then return 0 end
         end
